@@ -1,0 +1,6 @@
+*backup
+tfstate*
+*.terraform
+kubeconfig_*
+swp
+hcl
