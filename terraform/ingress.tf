@@ -35,10 +35,11 @@ resource "aws_acm_certificate_validation" "eks_domain_cert_validation" {
 # create base domain for EKS Cluster
 data "kubernetes_service" "ingress_gateway" {
   metadata {
+    namespace = "kube-system"
     name = join("-", [helm_release.ingress_gateway.chart, helm_release.ingress_gateway.name])
   }
 
-  depends_on = [module.eks]
+  depends_on = [helm_release.ingress_gateway]
 }
 data "aws_elb_hosted_zone_id" "elb_zone_id" {}
 resource "aws_route53_record" "eks_domain" {

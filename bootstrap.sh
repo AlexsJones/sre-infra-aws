@@ -35,5 +35,5 @@ terraform_init
 terraform_plan
 next
 
-aws eks --region us-east-1 update-kubeconfig --name sre-infra
+aws eks --region us-east-2 update-kubeconfig --name sre-infra
 }
