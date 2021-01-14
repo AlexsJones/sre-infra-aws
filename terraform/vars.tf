@@ -17,6 +17,10 @@ variable "region" {
 variable "dns_base_domain" {
   type = string
 }
+variable "deployments_subdomains" { 
+  type = list(string)
+  default = [""]
+}
 variable "ingress_gateway_annotations" {
   type = map(string)
   default = {

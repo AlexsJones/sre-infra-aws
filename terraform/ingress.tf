@@ -12,6 +12,14 @@ resource "aws_acm_certificate" "eks_domain_cert" {
     Name            = "${var.dns_base_domain}"
   }
 }
+resource "aws_route53_record" "deployments_subdomains" {
+  for_each = toset(var.deployments_subdomains)
+  zone_id = data.aws_route53_zone.base_domain.id
+  name    = "${each.key}.${aws_route53_record.eks_domain.fqdn}"
+  type    = "CNAME"
+  ttl     = "5"
+  records = ["${data.kubernetes_service.ingress_gateway.load_balancer_ingress.0.hostname}"]
+}
 resource "aws_route53_record" "eks_domain_cert_validation_dns" {
   for_each = {
     for dvo in aws_acm_certificate.eks_domain_cert.domain_validation_options : dvo.domain_name => {
