@@ -16,10 +16,15 @@ variable "region" {
 }
 variable "dns_base_domain" {
   type = string
+  default = "crystalbasilica.co.uk"
+}
+variable "certmanager_email" {
+  type = string
+  default = "foo@bar.com"
 }
 variable "deployments_subdomains" { 
   type = list(string)
-  default = [""]
+  default = ["gitlab"]
 }
 variable "ingress_gateway_annotations" {
   type = map(string)

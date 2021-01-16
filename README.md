@@ -15,9 +15,10 @@ Requirements:
 
 ### Terraform
 
-- This will depend on an existing r53 zone that is configurable at runtime e.g. "foo.com" 
 - Creates security groups, workers, EKS, ELB and other AWS resources.
 - User will be prompted to create an S3 bucket "sre-infra-aws" to hold terraform state if it does not exist.
+
+_Check the terraform/vars.tf as it will need the domain name configured_
 
 ```
 ./bootstrap.sh

@@ -5,6 +5,28 @@ resource "helm_release" "spot_termination_handler" {
   version   = "0.9.1"
   namespace = "kube-system"
 }
+resource "helm_release" "gitlab" {
+  name = "gitlab"
+  chart = "gitlab"
+  repository = "https://charts.gitlab.io/"
+  namespace = "gitlab"
+  version = "4.7.4"
+  create_namespace = true
+
+  set {
+    name = "global.hosts.domain"
+    value = var.dns_base_domain
+  }
+  set {
+    name = "global.edition"
+    value = "ce"
+  }
+  set {
+    name = "certmanager-issuer.email"
+    value = var.certmanager_email
+  }
+
+}
 resource "helm_release" "ingress_gateway" {
   name      = "nginx-ingress"
   chart      = "nginx-ingress"

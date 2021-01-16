@@ -1,6 +1,7 @@
 *backup
 tfstate*
 .DS_Store
+crash.log
 *.terraform
 kubeconfig_*
 swp
