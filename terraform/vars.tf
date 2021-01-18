@@ -8,7 +8,7 @@ variable "kube_version" {
 }
 variable "worker_group_size" {
   type = number
-  default = 3
+  default = 2
 }
 variable "region" {
   type = string

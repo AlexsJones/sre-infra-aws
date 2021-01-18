@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gitlab-ingress
+  annotations:
+    kubernetes.io/ingress.provider: alb
+spec:
+  rules:
+  - host: "gitlab.crystalbasilica.co.uk"
+    http:
+      paths:
+        - backend:
+            serviceName: gitlab-webservice-default
+            servicePort: 8080

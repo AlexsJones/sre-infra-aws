@@ -37,6 +37,7 @@ data "kubernetes_ingress" "gitlab-web" {
     name = "gitlab-webservice-default"
     namespace = "gitlab"
   }
+  depends_on=[helm_release.gitlab]
 }
 
 resource "aws_route53_record" "gitlab_subdomain" {
@@ -73,21 +74,3 @@ resource "aws_route53_record" "gitlab_registry_subdomain" {
   }
 }
 ############################################################
-#resource "helm_release" "ingress" {
-#  name      = "ingress"
-#  chart      = "aws-alb-ingress-controller"
-#  repository      = "https://charts.helm.sh/incubator"
-#  namespace = "kube-system"
-#  set {
-#    name = "autoDiscoverAwsRegion"
-#    value = true
-#  }
-#  set {
-#    name = "autoDiscoverAwsVpcID"
-#    value = true
-#  }
-#    set {
-#    name  = "clusterName"
-#    value = var.cluster_name
-#  }
-#}

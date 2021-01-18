@@ -26,7 +26,14 @@ module "eks" {
     {
       name = "${local.cluster_name}-worker-group-1"
       asg_desired_capacity =  var.worker_group_size
+      additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
+    },{
+      name = "${local.cluster_name}-worker-group-2"
+      asg_desired_capacity =  var.worker_group_size
+      additional_security_group_ids = [aws_security_group.worker_group_mgmt_two.id]
     }
   ]
+
+  worker_additional_security_group_ids = [aws_security_group.all_worker_mgmt.id]
 }
 
