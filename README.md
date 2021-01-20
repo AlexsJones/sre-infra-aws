@@ -82,3 +82,9 @@ And for deletion/cleanup
 ```
 ./destroy.sh
 ```
+
+### Troubleshooting
+
+_Destroy is not tearing down my VPC or has an error_
+
+Check that there aren't dangling resources such as an ELB created by Kubernetes.
