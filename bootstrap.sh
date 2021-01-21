@@ -1,7 +1,7 @@
 S3_BUCKET="sre-infra-aws"
 checkbucket() {
 echo "S3_BUCKET=$S3_BUCKET"
-if aws s3 ls "s3://$S3_BUCKET" | grep -q 'AllAccessDisabled'    
+if aws s3 ls "s3://$S3_BUCKET" | grep -q 'AllAccessDisabled'
 then
     echo "Please run aws s3 mb s3://$S3_BUCKET --region us-east-2"
     exit 1
@@ -12,7 +12,7 @@ terraform workspace new development || true
 terraform init
 }
 terraform_plan() {
-    terraform plan 
+    terraform plan
 }
 terraform_apply() {
     terraform apply
@@ -34,6 +34,5 @@ cd ./terraform || exit
 terraform_init
 terraform_plan
 next
-
 aws eks --region us-east-2 update-kubeconfig --name sre-infra
 }

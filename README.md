@@ -9,11 +9,12 @@ Requirements:
 - helm
 - tfenv
 - awscli
+- eksctl
 
 
 ![image](images/platform.png)
 
-## Infrastructure 
+## Infrastructure
 
 ```
   NAME                                                                          MONTHLY QTY  UNIT        PRICE   HOURLY COST  MONTHLY COST
@@ -66,7 +67,9 @@ Requirements:
   OVERALL TOTAL (USD)                                                                                                 0.7279      531.3500
 ```
 
-### Terraform
+## Installation 
+
+### 1. Terraform
 
 - Creates security groups, workers, EKS, ELB and other AWS resources.
 - User will be prompted to create an S3 bucket "sre-infra-aws" to hold terraform state if it does not exist.
@@ -77,22 +80,60 @@ _Check the terraform/vars.tf as it will need the domain name configured_
 ./bootstrap.sh
 ```
 
-And for deletion/cleanup
+_Post cluster installation_...
 
+### 2. AWS Load balancer controller
+
+This load balancer controller is superior when operating within AWS.
+See [here]() for details. 
+
+
+1. Create IAM OIDC provider
+    ```
+    eksctl utils associate-iam-oidc-provider \
+        --region <aws-region> \
+        --cluster <your-cluster-name> \
+        --approve
+    ```
+1. Download IAM policy for the AWS Load Balancer Controller
+    ```
+    curl -o iam-policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/main/docs/install/iam_policy.json
+    ```
+1. Create an IAM policy called AWSLoadBalancerControllerIAMPolicy
+    ```
+    aws iam create-policy \
+        --policy-name AWSLoadBalancerControllerIAMPolicy \
+        --policy-document file://iam-policy.json
+    ```
+    Take note of the policy ARN that is returned
+
+1. Create a IAM role and ServiceAccount for the Load Balancer controller, use the ARN from the step above
+    ```
+    eksctl create iamserviceaccount \
+    --cluster=<cluster-name> \
+    --namespace=kube-system \
+    --name=aws-load-balancer-controller \
+    --attach-policy-arn=arn:aws:iam::<AWS_ACCOUNT_ID>:policy/AWSLoadBalancerControllerIAMPolicy \
+    --approve
+    ```
+
+Add the EKS repository to Helm:
+```shell script
+helm repo add eks https://aws.github.io/eks-charts
 ```
-./destroy.sh
+
+Install the TargetGroupBinding CRDs:
+
+```shell script
+kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller//crds?ref=master"
 ```
 
-### Troubleshooting
+Install the AWS Load Balancer controller, if not using iamserviceaccount
+```shell script
+helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=<k8s-cluster-name>
+```
 
-_Destroy is not tearing down my VPC or has an error_
+### 3. Route53 configuration
 
-Check that there aren't dangling resources such as an ELB created by Kubernetes.
+//TBD
 
-
-_Load balancing doesn't work or I can't externally hit it correctly_
-
-This installation provides TLS termination at the apex domain with a wildcard, this is worth knowing as ELB/NLB/ALB won't function correctly if you are using a typical ingress class configuration,
-you'll need to redirect HTTPS->HTTP locally. 
-
-You'll see this has been done as part of the helm configuration for the default ingress.
