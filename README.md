@@ -82,3 +82,17 @@ And for deletion/cleanup
 ```
 ./destroy.sh
 ```
+
+### Troubleshooting
+
+_Destroy is not tearing down my VPC or has an error_
+
+Check that there aren't dangling resources such as an ELB created by Kubernetes.
+
+
+_Load balancing doesn't work or I can't externally hit it correctly_
+
+This installation provides TLS termination at the apex domain with a wildcard, this is worth knowing as ELB/NLB/ALB won't function correctly if you are using a typical ingress class configuration,
+you'll need to redirect HTTPS->HTTP locally. 
+
+You'll see this has been done as part of the helm configuration for the default ingress.
