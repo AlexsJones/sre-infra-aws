@@ -17,6 +17,7 @@ variable "ingress_gateway_annotations" {
   type = map(string)
   default = {
     "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-backend-protocol"        = "http",
+    "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-ports"               = "https",
     "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-connection-idle-timeout" = "60",
     "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-type"                    = "elb"
   }
@@ -39,6 +40,10 @@ resource "helm_release" "ingress_gateway" {
     }
   }
 
+  set {
+    name  = "controller.replicaCount"
+    value = format("%d", 2 * var.worker_group_size)
+  }
   set {
     name  = "controller.service.httpsPort.targetPort"
     value = "http" // This is due to TLS termination at the NLB
