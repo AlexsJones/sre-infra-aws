@@ -40,6 +40,10 @@ resource "helm_release" "ingress_gateway" {
   }
 
   set {
+    name  = "controller.service.httpsPort.targetPort"
+    value = "http" // This is due to TLS termination at the NLB
+  }
+  set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
     value = aws_acm_certificate.eks_domain_cert.id
   }
@@ -61,6 +65,6 @@ resource "aws_route53_record" "eks_domain" {
   alias {
     name                   = data.kubernetes_service.ingress_gateway.load_balancer_ingress.0.hostname
     zone_id                = data.aws_elb_hosted_zone_id.elb_zone_id.id
-    evaluate_target_health = false
+    evaluate_target_health = true
   }
 }
