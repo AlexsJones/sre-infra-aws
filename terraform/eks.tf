@@ -5,12 +5,12 @@ variable "kube_version" {
 
 variable "worker_group_size" {
   type    = number
-  default = 2
+  default = 3
 }
 
 variable "instance_type" {
   type    = string
-  default = "m4.large"
+  default = "t2.small"
 }
 variable "cluster_name" {
   type    = string
@@ -46,11 +46,6 @@ module "eks" {
       name                          = "${local.cluster_name}-worker-group-1"
       asg_desired_capacity          = var.worker_group_size
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
-      instance_type                 = var.instance_type
-      }, {
-      name                          = "${local.cluster_name}-worker-group-2"
-      asg_desired_capacity          = var.worker_group_size
-      additional_security_group_ids = [aws_security_group.worker_group_mgmt_two.id]
       instance_type                 = var.instance_type
     }
   ]
