@@ -33,3 +33,7 @@ output "cluster_name" {
   value       = local.cluster_name
 }
 
+output "cert_id" {
+  description = "ACM certificate ID"
+  value       = aws_acm_certificate.eks_domain_cert.id
+}

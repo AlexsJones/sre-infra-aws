@@ -1,22 +1,3 @@
-variable "kube_version" {
-  type    = string
-  default = "1.18"
-}
-
-variable "worker_group_size" {
-  type    = number
-  default = 3
-}
-
-variable "instance_type" {
-  type    = string
-  default = "t2.small"
-}
-variable "cluster_name" {
-  type    = string
-  default = "sre-infra"
-}
-
 locals {
   cluster_name = var.cluster_name
 }
