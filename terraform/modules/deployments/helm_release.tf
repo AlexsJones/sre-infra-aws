@@ -1,3 +1,6 @@
+variable "aws_acm_certificate" {}
+variable "dns_base_domain" {}
+
 variable "ingress_gateway_annotations" {
   type = map(string)
   default = {
@@ -30,7 +33,7 @@ resource "helm_release" "gitlab" {
   namespace        = "gitlab"
   version          = "4.7.4"
   create_namespace = true
-  wait             = false
+
   set {
     name  = "global.hosts.domain"
     value = var.dns_base_domain
@@ -49,7 +52,7 @@ resource "helm_release" "gitlab" {
   }
   set {
     name  = "nginx.controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
-    value = aws_acm_certificate.eks_domain_cert.id
+    value = var.aws_acm_certificate
   }
 }
 
@@ -59,7 +62,7 @@ resource "helm_release" "ingress_gateway" {
   repository = "https://helm.nginx.com/stable"
   version    = "0.5.2"
   namespace  = "kube-system"
-  wait       = false
+  wait       = true
   dynamic "set" {
     for_each = var.ingress_gateway_annotations
     content {
@@ -71,6 +74,6 @@ resource "helm_release" "ingress_gateway" {
 
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
-    value = aws_acm_certificate.eks_domain_cert.id
+    value = var.aws_acm_certificate
   }
 }

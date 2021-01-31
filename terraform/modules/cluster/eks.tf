@@ -8,10 +8,16 @@ variable "worker_group_size" {
   default = 3
 }
 
+variable "spot_price" {
+  type    = string
+  default = "0.199"
+}
+
 variable "instance_type" {
   type    = string
-  default = "t2.small"
+  default = "c4.xlarge"
 }
+
 variable "cluster_name" {
   type    = string
   default = "sre-infra"
@@ -43,10 +49,14 @@ module "eks" {
 
   worker_groups = [
     {
-      name                          = "${local.cluster_name}-worker-group-1"
+      name                          = "${local.cluster_name}-spot-worker-group-1"
       asg_desired_capacity          = var.worker_group_size
+      spot_price                    = var.spot_price
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
       instance_type                 = var.instance_type
+      kubelet_extra_args            = "--node-labels=node.kubernetes.io/lifecycle=spot"
+      suspended_processes           = ["AZRebalance"]
+      root_volume_type              = "gp2"
     }
   ]
 
