@@ -22,7 +22,7 @@ resource "aws_route53_record" "gitlab_subdomain" {
   type    = "A"
 
   alias {
-    name                   = data.kubernetes_service.ingress_gateway.status.0.load_balancer.0.ingress.0.hostname
+    name                   = data.kubernetes_service.gitlab_ingress.status.0.load_balancer.0.ingress.0.hostname
     zone_id                = var.elb_zone_id
     evaluate_target_health = true
   }
@@ -34,7 +34,7 @@ resource "aws_route53_record" "gitlab_minio_subdomain" {
   type    = "A"
 
   alias {
-    name                   = data.kubernetes_service.ingress_gateway.status.0.load_balancer.0.ingress.0.hostname
+    name                   = data.kubernetes_service.gitlab_ingress.status.0.load_balancer.0.ingress.0.hostname
     zone_id                = var.elb_zone_id
     evaluate_target_health = true
   }
@@ -46,7 +46,7 @@ resource "aws_route53_record" "gitlab_registry_subdomain" {
   type    = "A"
 
   alias {
-    name                   = data.kubernetes_service.ingress_gateway.status.0.load_balancer.0.ingress.0.hostname
+    name                   = data.kubernetes_service.gitlab_ingress.status.0.load_balancer.0.ingress.0.hostname
     zone_id                = var.elb_zone_id
     evaluate_target_health = true
   }
