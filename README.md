@@ -65,6 +65,6 @@ OVERALL TOTAL (USD)                                                             
 ```
 kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kubernetes.io/aws-load-balancer-backend-protocol=http --overwrite
 kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kubernetes.io/aws-load-balancer-ssl-ports=https --overwrite
-kubectl patch svc gitlab-nginx-ingress-controller -n gitlab --patch "$(cat kubernetes/patches/gitlab-svc.yaml)"
-kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kubernetes.io/aws-load-balancer-ssl-cert "$(terraform output cert_id | sed -e 's/^"//' -e 's/"$//')" --overwrite
+kubectl patch svc gitlab-nginx-ingress-controller -n gitlab --patch-file ../kubernetes/patches/gitlab-svc.yaml
+kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kubernetes.io/aws-load-balancer-ssl-cert=$(terraform output aws_acm_certificate | sed -e 's/^"//' -e 's/"$//') --overwrite
 ```
