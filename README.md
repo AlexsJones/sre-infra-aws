@@ -63,8 +63,9 @@ OVERALL TOTAL (USD)                                                             
 1. Gitlab ingress will expect additional annotations to load the ACM certificate and terminate TLS at the ELB.
 
 ```
-kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kubernetes.io/aws-load-balancer-backend-protocol=http --overwrite
+kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kubernetes.io/aws-load-balancer-backend-protocol=https --overwrite
 kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kubernetes.io/aws-load-balancer-ssl-ports=https --overwrite
-kubectl patch svc gitlab-nginx-ingress-controller -n gitlab --patch-file ../kubernetes/patches/gitlab-svc.yaml
 kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kubernetes.io/aws-load-balancer-ssl-cert=$(terraform output aws_acm_certificate | sed -e 's/^"//' -e 's/"$//') --overwrite
 ```
+
+2. `kubectl get secret/gitlab-gitlab-initial-root-password -n gitlab -ojsonpath='{.data.password}' | base64 --decode ; echo` for the gitlab password.
