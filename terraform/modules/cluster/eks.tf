@@ -8,9 +8,9 @@ variable "worker_group_size" {
   default = 3
 }
 
-variable "spot_price" {
+variable "max_spot_price" {
   type    = string
-  default = "0.199"
+  default = "0.250"
 }
 
 variable "instance_type" {
@@ -51,7 +51,7 @@ module "eks" {
     {
       name                          = "${local.cluster_name}-spot-worker-group-1"
       asg_desired_capacity          = var.worker_group_size
-      spot_price                    = var.spot_price
+      spot_price                    = var.max_spot_price
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
       instance_type                 = var.instance_type
       kubelet_extra_args            = "--node-labels=node.kubernetes.io/lifecycle=spot"
