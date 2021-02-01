@@ -3,6 +3,8 @@ data "kubernetes_service" "ingress_gateway" {
     namespace = "kube-system"
     name      = join("-", [helm_release.ingress_gateway.chart, helm_release.ingress_gateway.name])
   }
+
+  depends_on = [helm_release.ingress_gateway]
 }
 
 data "kubernetes_service" "gitlab_ingress" {
@@ -10,4 +12,5 @@ data "kubernetes_service" "gitlab_ingress" {
     namespace = "gitlab"
     name      = "gitlab-nginx-ingress-controller"
   }
+  depends_on = [helm_release.gitlab]
 }

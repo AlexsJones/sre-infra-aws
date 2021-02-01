@@ -33,7 +33,7 @@ resource "helm_release" "gitlab" {
   namespace        = "gitlab"
   version          = "4.7.4"
   create_namespace = true
-
+  wait             = false
   set {
     name  = "global.hosts.domain"
     value = var.dns_base_domain
