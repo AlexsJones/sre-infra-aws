@@ -47,6 +47,10 @@ resource "helm_release" "gitlab" {
     value = var.certmanager_email
   }
   set {
+    name  = "gitlab-runner.runners.privileged"
+    value = true
+  }
+  set {
     name  = "global.ingress.tls.enabled"
     value = "false"
   }
