@@ -61,6 +61,8 @@ Requirements:
 ### Post Installation
 
 
+0. `aws eks update-kubeconfig --name sre-infra --region eu-west-2`
+
 1. Gitlab ingress will expect additional annotations to load the ACM certificate and terminate TLS at the ELB.
 
 ```
