@@ -1,6 +1,7 @@
 variable "dns_base_domain_id" {}
 variable "elb_zone_id" {}
-
+variable "aws_acm_certificate" {}
+variable "dns_base_domain" {}
 
 # Default Ingress controller
 resource "aws_route53_record" "eks_domain" {

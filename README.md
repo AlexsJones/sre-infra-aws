@@ -77,4 +77,6 @@ kubectl annotate svc/gitlab-nginx-ingress-controller -n gitlab service.beta.kube
 
 3. Add the sre-infra cluster into the Gitlab Kubernetes integration [guide here](https://gitlab.cloud-skunkworks.co.uk/help/user/project/clusters/add_remove_clusters.md#add-existing-cluster)
 
-4. Apply `kubectl apply -f kubernetes/patches/gitlab-serviceaccount.yaml`
+4. Apply `kubectl apply -f kubernetes/gitlab-serviceaccount.yaml`
+
+5. Use `terraform refresh` to reveal the token, cert and API URL to link the cluster within gitlab.

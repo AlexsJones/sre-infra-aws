@@ -1,6 +1,3 @@
-variable "aws_acm_certificate" {}
-variable "dns_base_domain" {}
-
 variable "ingress_gateway_annotations" {
   type = map(string)
   default = {
@@ -16,14 +13,6 @@ variable "ingress_gateway_annotations" {
 variable "certmanager_email" {
   type    = string
   default = "alexsimonjones@gmail.com"
-}
-
-resource "helm_release" "spot_termination_handler" {
-  name       = "aws-node-termination-handler"
-  chart      = "aws-node-termination-handler"
-  repository = "https://aws.github.io/eks-charts"
-  version    = "0.9.1"
-  namespace  = "kube-system"
 }
 
 resource "helm_release" "gitlab" {
